@@ -1,0 +1,370 @@
+### Variables
+@baseUrl = http://localhost:8080
+@contentType = application/json
+
+### Store tokens for reuse
+# @name login_admin
+# @name login_buyer
+# @name login_seller
+
+###############################################
+### 1. USER REGISTRATION TESTS
+###############################################
+
+### Register new buyer user
+POST {{baseUrl}}/api/users/register
+Content-Type: {{contentType}}
+
+{
+  "username": "kemmie",
+  "email": "kemi@example.com",
+  "password": "KemiFalase123"
+}
+
+### Register second buyer for seller role testing
+POST {{baseUrl}}/api/users/register
+Content-Type: {{contentType}}
+
+{
+  "username": "jane_buyer",
+  "email": "jane.buyer@example.com",
+  "password": "Password123"
+}
+
+### Register admin user (you'll need to manually set this user's role to ADMIN in database)
+POST {{baseUrl}}/api/users/register
+Content-Type: {{contentType}}
+
+{
+  "username": "admin_user",
+  "email": "admin@example.com",
+  "password": "AdminPass123"
+}
+
+### Test registration validation - Invalid email
+POST {{baseUrl}}/api/users/register
+Content-Type: {{contentType}}
+
+{
+  "username": "test_user",
+  "email": "invalid-email",
+  "password": "Password123"
+}
+
+### Test registration validation - Weak password
+POST {{baseUrl}}/api/users/register
+Content-Type: {{contentType}}
+
+{
+  "username": "test_user2",
+  "email": "test2@example.com",
+  "password": "weak"
+}
+
+### Test duplicate email registration
+POST {{baseUrl}}/api/users/register
+Content-Type: {{contentType}}
+
+{
+  "username": "duplicate_user",
+  "email": "john.buyer@example.com",
+  "password": "Password123"
+}
+
+###############################################
+### 2. USER LOGIN TESTS
+###############################################
+
+### Login as buyer
+# @name buyer_login
+POST {{baseUrl}}/api/users/login
+Content-Type: {{contentType}}
+
+{
+  "email": "kemi@example.com",
+  "password": "KemiFalase123"
+}
+
+### Login as second buyer (for seller role testing)
+# @name buyer2_login
+POST {{baseUrl}}/api/users/login
+Content-Type: {{contentType}}
+
+{
+  "email": "jane.buyer@example.com",
+  "password": "Password123"
+}
+
+### Login as admin (make sure to set role to ADMIN in database first)
+# @name admin_login
+POST {{baseUrl}}/api/users/login
+Content-Type: {{contentType}}
+
+{
+  "email": "femifalase228@gmail.com",
+  "password": "Falasefemi228@"
+}
+
+### Test invalid login credentials
+POST {{baseUrl}}/api/users/login
+Content-Type: {{contentType}}
+
+{
+  "email": "john.buyer@example.com",
+  "password": "WrongPassword"
+}
+
+### Test login with non-existent user
+POST {{baseUrl}}/api/users/login
+Content-Type: {{contentType}}
+
+{
+  "email": "nonexistent@example.com",
+  "password": "Password123"
+}
+
+###############################################
+### 3. AUTHENTICATED USER ENDPOINTS
+###############################################
+
+### Get current user details (buyer)
+GET {{baseUrl}}/api/users/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQlVZRVIiLCJ1c2VySWQiOjIsInN1YiI6ImphbmUuYnV5ZXJAZXhhbXBsZS5jb20iLCJpYXQiOjE3NTI5ODQ0OTUsImV4cCI6MTc1MzA3MDg5NX0.Z1IyFdMK7gCgjNf11oTRoytvJTSrgwOIdmR34l0bqIo
+
+### Get current user details (admin)
+GET {{baseUrl}}/api/users/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjQsInN1YiI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwiaWF0IjoxNzUyOTg0NTEwLCJleHAiOjE3NTMwNzA5MTB9.bZqeVDgXcufC0RqH55d4Hf5HWithp472ANy2A4Ez1bU
+
+### Test unauthorized access (no token)
+GET {{baseUrl}}/api/users/me
+
+### Test invalid token
+GET {{baseUrl}}/api/users/me
+Authorization: Bearer invalid_token_here
+
+###############################################
+### 4. SELLER ROLE REQUEST TESTS
+###############################################
+
+### Request seller role (buyer)
+POST {{baseUrl}}/api/users/request-seller
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQlVZRVIiLCJ1c2VySWQiOjIsInN1YiI6ImphbmUuYnV5ZXJAZXhhbXBsZS5jb20iLCJpYXQiOjE3NTI5ODQ0OTUsImV4cCI6MTc1MzA3MDg5NX0.Z1IyFdMK7gCgjNf11oTRoytvJTSrgwOIdmR34l0bqIo
+
+### Request seller role (second buyer)
+POST {{baseUrl}}/api/users/request-seller
+Authorization: Bearer {{buyer2_login.response.body.data.token}}
+
+### Try to request seller role again (should fail)
+POST {{baseUrl}}/api/users/request-seller
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQlVZRVIiLCJ1c2VySWQiOjIsInN1YiI6ImphbmUuYnV5ZXJAZXhhbXBsZS5jb20iLCJpYXQiOjE3NTI5ODQ0OTUsImV4cCI6MTc1MzA3MDg5NX0.Z1IyFdMK7gCgjNf11oTRoytvJTSrgwOIdmR34l0bqIo
+
+### Try to request seller role as admin (should fail - admin is not buyer)
+POST {{baseUrl}}/api/users/request-seller
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjQsInN1YiI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwiaWF0IjoxNzUyOTg0NTEwLCJleHAiOjE3NTMwNzA5MTB9.bZqeVDgXcufC0RqH55d4Hf5HWithp472ANy2A4Ez1bU
+
+### Try to request seller role without authentication
+POST {{baseUrl}}/api/users/request-seller
+
+###############################################
+### 5. ADMIN ENDPOINTS TESTS
+###############################################
+
+### Get all pending seller requests (admin only)
+GET {{baseUrl}}/api/users/pending-sellers
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjQsInN1YiI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwiaWF0IjoxNzUyOTg0NTEwLCJleHAiOjE3NTMwNzA5MTB9.bZqeVDgXcufC0RqH55d4Hf5HWithp472ANy2A4Ez1bU
+
+### Try to get pending sellers as buyer (should fail)
+GET {{baseUrl}}/api/users/pending-sellers
+Authorization: Bearer {{buyer_login.response.body.data.token}}
+
+### Get all users with pagination (admin only)
+GET {{baseUrl}}/api/users/all?page=0&size=10&sortBy=id&sortDir=ASC
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjQsInN1YiI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwiaWF0IjoxNzUyOTg0NTEwLCJleHAiOjE3NTMwNzA5MTB9.bZqeVDgXcufC0RqH55d4Hf5HWithp472ANy2A4Ez1bU
+
+### Get all users - different page
+GET {{baseUrl}}/api/users/all?page=0&size=5&sortBy=email&sortDir=DESC
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjQsInN1YiI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwiaWF0IjoxNzUyOTg0NTEwLCJleHAiOjE3NTMwNzA5MTB9.bZqeVDgXcufC0RqH55d4Hf5HWithp472ANy2A4Ez1bU
+
+### Try to get all users as buyer (should fail)
+GET {{baseUrl}}/api/users/all
+Authorization: Bearer {{buyer_login.response.body.data.token}}
+
+### Get user by ID (admin only) - replace {userId} with actual user ID
+GET {{baseUrl}}/api/users/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjQsInN1YiI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwiaWF0IjoxNzUyOTg0NTEwLCJleHAiOjE3NTMwNzA5MTB9.bZqeVDgXcufC0RqH55d4Hf5HWithp472ANy2A4Ez1bU
+
+### Try to get user by ID as buyer (should fail)
+GET {{baseUrl}}/api/users/1
+Authorization: Bearer {{buyer_login.response.body.data.token}}
+
+### Get non-existent user (admin)
+GET {{baseUrl}}/api/users/999
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjQsInN1YiI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwiaWF0IjoxNzUyOTg0NTEwLCJleHAiOjE3NTMwNzA5MTB9.bZqeVDgXcufC0RqH55d4Hf5HWithp472ANy2A4Ez1bU
+
+###############################################
+### 6. SELLER APPROVAL TESTS
+###############################################
+
+### Approve seller role (admin only) - replace {userId} with actual pending user ID
+POST {{baseUrl}}/api/users/approve-seller/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjQsInN1YiI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwiaWF0IjoxNzUyOTg0NTEwLCJleHAiOjE3NTMwNzA5MTB9.bZqeVDgXcufC0RqH55d4Hf5HWithp472ANy2A4Ez1bU
+
+### Try to approve seller role as buyer (should fail)
+POST {{baseUrl}}/api/users/approve-seller/3
+Authorization: Bearer {{buyer_login.response.body.data.token}}
+
+### Try to approve non-existent user
+POST {{baseUrl}}/api/users/approve-seller/999
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjQsInN1YiI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwiaWF0IjoxNzUyOTg0NTEwLCJleHAiOjE3NTMwNzA5MTB9.bZqeVDgXcufC0RqH55d4Hf5HWithp472ANy2A4Ez1bU
+
+### Try to approve user who is not in pending state
+POST {{baseUrl}}/api/users/approve-seller/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjQsInN1YiI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwiaWF0IjoxNzUyOTg0NTEwLCJleHAiOjE3NTMwNzA5MTB9.bZqeVDgXcufC0RqH55d4Hf5HWithp472ANy2A4Ez1bU
+
+###############################################
+### 7. SELLER REJECTION TESTS
+###############################################
+
+### Reject seller role (admin only) - replace {userId} with actual pending user ID
+POST {{baseUrl}}/api/users/reject-seller/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjQsInN1YiI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwiaWF0IjoxNzUyOTg0NTEwLCJleHAiOjE3NTMwNzA5MTB9.bZqeVDgXcufC0RqH55d4Hf5HWithp472ANy2A4Ez1bU
+
+### Try to reject seller role as buyer (should fail)
+POST {{baseUrl}}/api/users/reject-seller/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjQsInN1YiI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwiaWF0IjoxNzUyOTg0NTEwLCJleHAiOjE3NTMwNzA5MTB9.bZqeVDgXcufC0RqH55d4Hf5HWithp472ANy2A4Ez1bU
+
+### Try to reject non-existent user
+POST {{baseUrl}}/api/users/reject-seller/999
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjQsInN1YiI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwiaWF0IjoxNzUyOTg0NTEwLCJleHAiOjE3NTMwNzA5MTB9.bZqeVDgXcufC0RqH55d4Hf5HWithp472ANy2A4Ez1bU
+
+### Try to reject user who is not in pending state
+POST {{baseUrl}}/api/users/reject-seller/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjQsInN1YiI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwiaWF0IjoxNzUyOTg0NTEwLCJleHAiOjE3NTMwNzA5MTB9.bZqeVDgXcufC0RqH55d4Hf5HWithp472ANy2A4Ez1bU
+
+###############################################
+### 8. LOGOUT TESTS
+###############################################
+
+### Logout user (authenticated)
+POST {{baseUrl}}/api/users/logout
+Authorization: Bearer {{buyer_login.response.body.data.token}}
+
+### Logout admin
+POST {{baseUrl}}/api/users/logout
+Authorization: Bearer {{admin_login.response.body.data.token}}
+
+### Try to logout without authentication
+POST {{baseUrl}}/api/users/logout
+
+### Try to logout with invalid token
+POST {{baseUrl}}/api/users/logout
+Authorization: Bearer invalid_token_here
+
+###############################################
+### 9. TOKEN EXPIRATION TESTS
+###############################################
+
+### Test with expired token (you'll need to wait or modify JWT expiration for this)
+### GET {{baseUrl}}/api/users/me
+### Authorization: Bearer expired_token_here
+
+###############################################
+### 10. EDGE CASES AND ERROR SCENARIOS
+###############################################
+
+### Test malformed JSON
+POST {{baseUrl}}/api/users/register
+Content-Type: {{contentType}}
+
+{
+  "username": "test_user"
+  "email": "test@example.com",  // Missing comma
+  "password": "Password123"
+}
+
+### Test empty request body
+POST {{baseUrl}}/api/users/register
+Content-Type: {{contentType}}
+
+{}
+
+### Test SQL injection attempt
+POST {{baseUrl}}/api/users/login
+Content-Type: {{contentType}}
+
+{
+  "email": "admin@example.com'; DROP TABLE users; --",
+  "password": "Password123"
+}
+
+### Test XSS attempt in registration
+POST {{baseUrl}}/api/users/register
+Content-Type: {{contentType}}
+
+{
+  "username": "<script>alert('xss')</script>",
+  "email": "xss@example.com",
+  "password": "Password123"
+}
+
+###############################################
+### 11. PERFORMANCE/STRESS TESTS
+###############################################
+
+### Multiple rapid login attempts (rate limiting test)
+POST {{baseUrl}}/api/users/login
+Content-Type: {{contentType}}
+
+{
+  "email": "john.buyer@example.com",
+  "password": "WrongPassword"
+}
+
+### Large pagination request
+GET {{baseUrl}}/api/users/all?page=0&size=1000
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjQsInN1YiI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwiaWF0IjoxNzUyOTg0NTEwLCJleHAiOjE3NTMwNzA5MTB9.bZqeVDgXcufC0RqH55d4Hf5HWithp472ANy2A4Ez1bU
+
+###############################################
+### 12. WORKFLOW TESTS
+###############################################
+
+### Complete workflow test
+### 1. Register user
+POST {{baseUrl}}/api/users/register
+Content-Type: {{contentType}}
+
+{
+  "username": "workflow_user",
+  "email": "workflow@example.com",
+  "password": "Password123"
+}
+
+### 2. Login user
+# @name workflow_login
+POST {{baseUrl}}/api/users/login
+Content-Type: {{contentType}}
+
+{
+  "email": "workflow@example.com",
+  "password": "Password123"
+}
+
+### 3. Get user details
+GET {{baseUrl}}/api/users/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQlVZRVIiLCJ1c2VySWQiOjUsInN1YiI6IndvcmtmbG93QGV4YW1wbGUuY29tIiwiaWF0IjoxNzUyOTg1MDc5LCJleHAiOjE3NTMwNzE0Nzl9.cckIxG6o_6SnjUWGwhpgyrypT7Icir8cNSa8gOh2884
+
+### 4. Request seller role
+POST {{baseUrl}}/api/users/request-seller
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQlVZRVIiLCJ1c2VySWQiOjUsInN1YiI6IndvcmtmbG93QGV4YW1wbGUuY29tIiwiaWF0IjoxNzUyOTg1MDc5LCJleHAiOjE3NTMwNzE0Nzl9.cckIxG6o_6SnjUWGwhpgyrypT7Icir8cNSa8gOh2884
+
+### 5. Admin checks pending requests
+GET {{baseUrl}}/api/users/pending-sellers
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjQsInN1YiI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwiaWF0IjoxNzUyOTg0NTEwLCJleHAiOjE3NTMwNzA5MTB9.bZqeVDgXcufC0RqH55d4Hf5HWithp472ANy2A4Ez1bU
+
+### 6. Admin approves seller role (replace with actual user ID)
+POST {{baseUrl}}/api/users/approve-seller/5
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjQsInN1YiI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwiaWF0IjoxNzUyOTg0NTEwLCJleHAiOjE3NTMwNzA5MTB9.bZqeVDgXcufC0RqH55d4Hf5HWithp472ANy2A4Ez1bU
+
+### 7. Verify user is now seller
+GET {{baseUrl}}/api/users/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQlVZRVIiLCJ1c2VySWQiOjUsInN1YiI6IndvcmtmbG93QGV4YW1wbGUuY29tIiwiaWF0IjoxNzUyOTg1MDc5LCJleHAiOjE3NTMwNzE0Nzl9.cckIxG6o_6SnjUWGwhpgyrypT7Icir8cNSa8gOh2884

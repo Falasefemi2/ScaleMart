@@ -1,0 +1,33 @@
+### ✅ Seller creates product
+POST http://localhost:8081/api/products/seller/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiU0VMTEVSIiwiZW1haWwiOiJqYW5lLmJ1eWVyQGV4YW1wbGUuY29tIiwic3ViIjoiMiIsImlhdCI6MTc1MzAzMDA1OCwiZXhwIjoxNzUzMTE2NDU4fQ.zOVAyaQNZ2ceL0VW8dKTDm4A-iq0v3NeQVYsxP3gWMg
+
+{
+  "name": "Samsung Galaxy S24 Ultra",
+  "description": "6.8-inch Dynamic AMOLED, 256GB Storage, 12GB RAM, 200MP Camera",
+  "price": 1299.99,
+  "stockQuantity": 12,
+  "category": "Smartphones",
+  "imageUrls": [
+    "https://cdn.fakeurl.com/galaxy-front.jpg",
+    "https://cdn.fakeurl.com/galaxy-back.jpg"
+  ]
+}
+
+
+
+### 🕵️ Admin fetches all pending products
+GET http://localhost:8081/api/products/admin/pending
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJlbWFpbCI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwic3ViIjoiNCIsImlhdCI6MTc1MzAyOTg3OCwiZXhwIjoxNzUzMTE2Mjc4fQ.99VVZJGMkktoJhgD5Dtes2WmXmhYXM7KIlVe8SVifrQ
+
+### ✅ Admin approves product
+POST http://localhost:8081/api/products/admin/approve/9
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJlbWFpbCI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwic3ViIjoiNCIsImlhdCI6MTc1MzAyOTg3OCwiZXhwIjoxNzUzMTE2Mjc4fQ.99VVZJGMkktoJhgD5Dtes2WmXmhYXM7KIlVe8SVifrQ
+
+### ❌ Admin rejects product
+POST http://localhost:8081/api/products/admin/reject/7
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJlbWFpbCI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwic3ViIjoiNCIsImlhdCI6MTc1MzAyOTg3OCwiZXhwIjoxNzUzMTE2Mjc4fQ.99VVZJGMkktoJhgD5Dtes2WmXmhYXM7KIlVe8SVifrQ
+
+### 🌍 Public: get approved products
+GET http://localhost:8081/api/products/public/approved
