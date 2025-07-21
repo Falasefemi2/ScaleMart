@@ -42,6 +42,7 @@ public class OrderServiceImpl implements OrderService {
                 .sellerId(product.getSellerId())
                 .quantity(request.getQuantity())
                 .totalAmount(totalPrice)
+                .productName(product.getName())
                 .orderStatus(OrderStatus.PLACED)
                 .createdAt(LocalDateTime.now())
                 .build();

@@ -1,10 +1,8 @@
 package com.femi.orderservice.controller;
 
-import com.femi.orderservice.dto.OrderRequestDTO;
-import com.femi.orderservice.dto.OrderResponse;
-import com.femi.orderservice.dto.OrderResponseDTO;
-import com.femi.orderservice.dto.OrderStatusUpdateDTO;
+import com.femi.orderservice.dto.*;
 import com.femi.orderservice.service.OrderService;
+import com.femi.orderservice.service.PaymentServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +18,7 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+    private final PaymentServiceImpl  paymentService;
 
     @PostMapping
     @PreAuthorize("hasRole('BUYER')")
@@ -58,5 +57,12 @@ public class OrderController {
     ) {
         OrderResponseDTO updatedOrder = orderService.updateOrderStatus(id, statusUpdateDTO.getOrderStatus());
         return ResponseEntity.ok(updatedOrder);
+    }
+
+    @PostMapping("/{orderId}/pay")
+    @PreAuthorize("hasRole('BUYER')")
+    public ResponseEntity<PaymentResponseDTO> payForOrder(@PathVariable Long orderId) {
+        String buyerId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(paymentService.initiatePayment(orderId, buyerId));
     }
 }

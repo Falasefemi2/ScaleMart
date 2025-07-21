@@ -1,5 +1,5 @@
 ### Variables
-@baseUrl = http://localhost:8080
+@baseUrl = http://localhost:8083
 @contentType = application/json
 
 ### Store tokens for reuse

@@ -1,33 +1,31 @@
 ### ✅ Seller creates product
-POST http://localhost:8081/api/products/seller/create
+POST http://localhost:8083/api/products/seller/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiU0VMTEVSIiwiZW1haWwiOiJqYW5lLmJ1eWVyQGV4YW1wbGUuY29tIiwic3ViIjoiMiIsImlhdCI6MTc1MzAzMDA1OCwiZXhwIjoxNzUzMTE2NDU4fQ.zOVAyaQNZ2ceL0VW8dKTDm4A-iq0v3NeQVYsxP3gWMg
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiU0VMTEVSIiwiZW1haWwiOiJqYW5lLmJ1eWVyQGV4YW1wbGUuY29tIiwic3ViIjoiMiIsImlhdCI6MTc1MzA5MjA2MSwiZXhwIjoxNzUzMTc4NDYxfQ.2l6U-pozi_TA0eFNCDrvBCTyAgO126qCEd1Aib3LbBU
 
 {
-  "name": "Samsung Galaxy S24 Ultra",
-  "description": "6.8-inch Dynamic AMOLED, 256GB Storage, 12GB RAM, 200MP Camera",
-  "price": 1299.99,
-  "stockQuantity": 12,
+  "name": "Apple iPhone 15 Pro",
+  "description": "6.1-inch Super Retina XDR Display, 256GB Storage, A17 Pro Chip, 48MP Main Camera",
+  "price": 1199.99,
+  "stockQuantity": 10,
   "category": "Smartphones",
   "imageUrls": [
-    "https://cdn.fakeurl.com/galaxy-front.jpg",
-    "https://cdn.fakeurl.com/galaxy-back.jpg"
+    "https://cdn.fakeurl.com/iphone15pro-front.jpg",
+    "https://cdn.fakeurl.com/iphone15pro-back.jpg"
   ]
 }
 
 
-
 ### 🕵️ Admin fetches all pending products
-GET http://localhost:8081/api/products/admin/pending
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJlbWFpbCI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwic3ViIjoiNCIsImlhdCI6MTc1MzAyOTg3OCwiZXhwIjoxNzUzMTE2Mjc4fQ.99VVZJGMkktoJhgD5Dtes2WmXmhYXM7KIlVe8SVifrQ
+GET http://localhost:8083/api/products/admin/pending
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJlbWFpbCI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwic3ViIjoiNCIsImlhdCI6MTc1MzA5MjQ1OCwiZXhwIjoxNzUzMTc4ODU4fQ.ryPnhKthdHlZSMBi4XtiIOhXs_NMkv7_b2TWSo1ox1o
 
 ### ✅ Admin approves product
-POST http://localhost:8081/api/products/admin/approve/9
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJlbWFpbCI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwic3ViIjoiNCIsImlhdCI6MTc1MzAyOTg3OCwiZXhwIjoxNzUzMTE2Mjc4fQ.99VVZJGMkktoJhgD5Dtes2WmXmhYXM7KIlVe8SVifrQ
-
+POST http://localhost:8083/api/products/admin/approve/10
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJlbWFpbCI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwic3ViIjoiNCIsImlhdCI6MTc1MzA5MjQ1OCwiZXhwIjoxNzUzMTc4ODU4fQ.ryPnhKthdHlZSMBi4XtiIOhXs_NMkv7_b2TWSo1ox1o
 ### ❌ Admin rejects product
 POST http://localhost:8081/api/products/admin/reject/7
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJlbWFpbCI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwic3ViIjoiNCIsImlhdCI6MTc1MzAyOTg3OCwiZXhwIjoxNzUzMTE2Mjc4fQ.99VVZJGMkktoJhgD5Dtes2WmXmhYXM7KIlVe8SVifrQ
 
 ### 🌍 Public: get approved products
-GET http://localhost:8081/api/products/public/approved
+GET http://localhost:8083/api/products/public/approved
