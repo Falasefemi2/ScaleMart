@@ -46,19 +46,6 @@ public class JwtTokenProvider {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-//    public String generateToken(User user) {
-//        Map<String, Object> claims = new HashMap<>();
-//        claims.put("userId", user.getId());
-//        claims.put("role", user.getRole().name());
-//
-//        return Jwts.builder()
-//                .claims(claims)
-//                .subject(user.getEmail())
-//                .issuedAt(new Date(System.currentTimeMillis()))
-//                .expiration(new Date(System.currentTimeMillis() + jwtExpiration * 1000))
-//                .signWith(getSigningKey(), Jwts.SIG.HS256)
-//                .compact();
-//    }
 
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
@@ -67,7 +54,7 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .claims(claims)
-                .subject(user.getId().toString()) // ✅ FIX: this becomes `claims.getSubject()` later
+                .subject(user.getId().toString())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + jwtExpiration * 1000))
                 .signWith(getSigningKey(), Jwts.SIG.HS256)

@@ -27,6 +27,8 @@ eureka:
 server:
   port: 8080
 
-
 jwt:
   secret: 76OvjrdGvXFSkhSaLkkN8+XP3+5jloEsH1BS0mxUTTn6ZqhNLw5ccrxSLzJP0hQO1P7G2Bn/z8zoioNTd3rvrw==
+
+
+
