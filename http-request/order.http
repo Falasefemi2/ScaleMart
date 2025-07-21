@@ -1,0 +1,32 @@
+### Create an Order (Buyer Only - Needs JWT Token)
+POST http://localhost:8082/api/orders
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQlVZRVIiLCJlbWFpbCI6InBldGVyLmJ1eWVyQGV4YW1wbGUuY29tIiwic3ViIjoiNyIsImlhdCI6MTc1MzA1NTcyNiwiZXhwIjoxNzUzMTQyMTI2fQ.EVVMUFWFgZOJXmA_XGsdDl1fFER4_UNSgx45gjngY0M
+
+{
+  "productId": 3,
+  "quantity": 10
+}
+
+###
+
+### Get Order by ID
+GET http://localhost:8082/api/orders/6
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQlVZRVIiLCJlbWFpbCI6InBldGVyLmJ1eWVyQGV4YW1wbGUuY29tIiwic3ViIjoiNyIsImlhdCI6MTc1MzA1NTcyNiwiZXhwIjoxNzUzMTQyMTI2fQ.EVVMUFWFgZOJXmA_XGsdDl1fFER4_UNSgx45gjngY0M
+
+###
+
+### Get Orders for Buyer
+GET http://localhost:8082/api/orders/buyer/my-orders
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQlVZRVIiLCJlbWFpbCI6InBldGVyLmJ1eWVyQGV4YW1wbGUuY29tIiwic3ViIjoiNyIsImlhdCI6MTc1MzA1NTcyNiwiZXhwIjoxNzUzMTQyMTI2fQ.EVVMUFWFgZOJXmA_XGsdDl1fFER4_UNSgx45gjngY0M
+
+###
+
+### Update Order Status (Admin Only)
+PUT http://localhost:8082/api/orders/5/status
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJlbWFpbCI6ImZlbWlmYWxhc2UyMjhAZ21haWwuY29tIiwic3ViIjoiNCIsImlhdCI6MTc1MzA1MjE1NywiZXhwIjoxNzUzMTM4NTU3fQ.yZ3RU8VwfgBsMeOhJ84EXaBALTwdQVTKJ25VvUnoWJ8
+
+{
+  "orderStatus": "CONFIRMED"
+}

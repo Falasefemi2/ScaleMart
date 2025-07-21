@@ -66,8 +66,8 @@ POST {{baseUrl}}/api/users/register
 Content-Type: {{contentType}}
 
 {
-  "username": "duplicate_user",
-  "email": "john.buyer@example.com",
+  "username": "duplicated_user",
+  "email": "peter.buyer@example.com",
   "password": "Password123"
 }
 
@@ -81,8 +81,8 @@ POST {{baseUrl}}/api/users/login
 Content-Type: {{contentType}}
 
 {
-  "email": "kemi@example.com",
-  "password": "KemiFalase123"
+  "email": "peter.buyer@example.com",
+  "password": "Password123"
 }
 
 ### Login as second buyer (for seller role testing)

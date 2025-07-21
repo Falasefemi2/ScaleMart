@@ -58,4 +58,12 @@ public class ProductController {
     public ResponseEntity<List<ProductResponse>> getApprovedProducts() {
         return ResponseEntity.ok(productService.getApprovedProducts());
     }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SELLER', 'BUYER')")
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id) {
+        ProductResponse product = productService.getProductById(id);
+        return ResponseEntity.ok(product);
+    }
+
 }

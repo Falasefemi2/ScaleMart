@@ -1,6 +1,6 @@
 # ScaleMart
 
-ScaleMart is a microservices-based e-commerce application built with Spring Boot. It consists of three main services: a Eureka Server for service discovery, a User Service for managing users and authentication, and a Product Service for managing products.
+ScaleMart is a microservices-based e-commerce application built with Spring Boot. It consists of four main services: a Eureka Server for service discovery, a User Service for managing users and authentication, a Product Service for managing products, and an Order Service for handling customer orders.
 
 ## Table of Contents
 
@@ -9,19 +9,21 @@ ScaleMart is a microservices-based e-commerce application built with Spring Boot
   - [Eureka Server](#eureka-server)
   - [User Service](#user-service)
   - [Product Service](#product-service)
+  - [Order Service](#order-service)
 - [Technologies Used](#technologies-used)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
 - [API Endpoints](#api-endpoints)
   - [User Service Endpoints](#user-service-endpoints)
   - [Product Service Endpoints](#product-service-endpoints)
+  - [Order Service Endpoints](#order-service-endpoints)
 - [Configuration](#configuration)
 - [Database](#database)
 - [Security](#security)
 
 ## Project Description
 
-ScaleMart is designed to be a scalable and resilient e-commerce platform. By leveraging a microservices architecture, each core functionality (user management, product management, service discovery) is encapsulated in its own independent service. This modular approach allows for easier development, deployment, and maintenance.
+ScaleMart is designed to be a scalable and resilient e-commerce platform. By leveraging a microservices architecture, each core functionality (user management, product management, order management, service discovery) is encapsulated in its own independent service. This modular approach allows for easier development, deployment, and maintenance.
 
 ## Modules
 
@@ -42,13 +44,19 @@ ScaleMart is designed to be a scalable and resilient e-commerce platform. By lev
 - **Port**: `8081`
 - **Database**: `product_db`
 
+### Order Service
+
+- **Description**: The Order Service handles all aspects of customer orders, including creating new orders, retrieving order details, and managing order statuses. It communicates with the Product Service to verify product availability and with the User Service to associate orders with customers.
+- **Port**: `8082`
+- **Database**: `order_db`
+
 ## Technologies Used
 
 - **Spring Boot**: For building the microservices.
 - **Spring Cloud Netflix Eureka**: For service discovery.
 - **Spring Data JPA**: For database interactions.
 - **Spring Security**: For authentication and authorization.
-- **MySQL**: As the database for both the User and Product services.
+- **MySQL**: As the database for the User, Product, and Order services.
 - **JSON Web Tokens (JWT)**: For securing the application.
 - **Maven**: For dependency management.
 - **Lombok**: To reduce boilerplate code.
@@ -59,17 +67,17 @@ ScaleMart is designed to be a scalable and resilient e-commerce platform. By lev
 - Java 21
 - Maven
 - MySQL
-- AWS Account with S3 bucket
+
 
 ## Getting Started
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/ScaleMart.git
+   git clone https://github.com/Falasefemi2/ScaleMart.git
    ```
 
 2. **Configure the services**:
-   - Update the `application.yml` file in each service (`user-service` and `product-service`) with your MySQL database credentials.
+   - Update the `application.yml` file in each service (`user-service`, `product-service`, and `order-service`) with your MySQL database credentials.
    - In the `product-service`, configure your AWS credentials and S3 bucket name in the `application.yml` file.
 
 3. **Build the services**:
@@ -80,7 +88,7 @@ ScaleMart is designed to be a scalable and resilient e-commerce platform. By lev
 
 4. **Run the services**:
    - Start the Eureka Server first.
-   - Then, start the User Service and the Product Service.
+   - Then, start the User Service, Product Service, and Order Service.
    - You can run each service from your IDE or by using the following command in the service's root directory:
      ```bash
      mvn spring-boot:run
@@ -101,6 +109,13 @@ ScaleMart is designed to be a scalable and resilient e-commerce platform. By lev
 - `PUT /api/v1/products/{id}`: Update a product (requires authentication).
 - `DELETE /api/v1/products/{id}`: Delete a product (requires authentication).
 
+### Order Service Endpoints
+
+- `POST /api/v1/orders`: Create a new order (requires authentication).
+- `GET /api/v1/orders`: Get a list of all orders for the authenticated user.
+- `GET /api/v1/orders/{id}`: Get an order by its ID.
+- `PUT /api/v1/orders/{id}`: Update an order's status (e.g., cancel).
+
 ## Configuration
 
 Each service has its own `application.yml` file for configuration. Key properties to configure include:
@@ -113,11 +128,11 @@ Each service has its own `application.yml` file for configuration. Key propertie
 
 ## Database
 
-The User Service and Product Service use separate MySQL databases (`user_db` and `product_db`, respectively). The application will automatically create the databases if they do not exist, as configured in the `spring.datasource.url` property.
+The User Service, Product Service, and Order Service use separate MySQL databases (`user_db`, `product_db`, and `order_db`, respectively). The application will automatically create the databases if they do not exist, as configured in the `spring.datasource.url` property.
 
 ## Security
 
-The User Service and Product Service are secured using JWT. To access protected endpoints, you need to include a valid JWT in the `Authorization` header of your request:
+The User Service, Product Service, and Order Service are secured using JWT. To access protected endpoints, you need to include a valid JWT in the `Authorization` header of your request:
 
 ```
 Authorization: Bearer <your-jwt-token>

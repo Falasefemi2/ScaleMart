@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: order-service
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/order_db?createDatabaseIfNotExist=true
+    username: root
+    password: admin
+    hikari:
+      maximum-pool-size: 10
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+product:
+  service:
+    url: http://localhost:8081
+
+
+feign:
+  client:
+    config:
+      product-service:
+        loggerLevel: FULL
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8082
+
+
+jwt:
+  secret: 76OvjrdGvXFSkhSaLkkN8+XP3+5jloEsH1BS0mxUTTn6ZqhNLw5ccrxSLzJP0hQO1P7G2Bn/z8zoioNTd3rvrw==

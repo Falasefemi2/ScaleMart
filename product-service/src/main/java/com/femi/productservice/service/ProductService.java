@@ -92,6 +92,13 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    public ProductResponse getProductById(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+        return toDto(product);
+    }
+
+
     private ProductResponse toDto(Product product) {
         return ProductResponse.builder()
                 .id(product.getId())
