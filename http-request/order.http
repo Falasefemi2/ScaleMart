@@ -17,7 +17,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQlVZRVIiLCJlbWFpbCI6InBld
 ###
 
 ### Get Orders for Buyer
-GET http://localhost:8082/api/orders/buyer/my-orders
+GET http://localhost:8083/api/orders/buyer/my-orders
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQlVZRVIiLCJlbWFpbCI6InBldGVyLmJ1eWVyQGV4YW1wbGUuY29tIiwic3ViIjoiNyIsImlhdCI6MTc1MzA1NTcyNiwiZXhwIjoxNzUzMTQyMTI2fQ.EVVMUFWFgZOJXmA_XGsdDl1fFER4_UNSgx45gjngY0M
 
 ###
