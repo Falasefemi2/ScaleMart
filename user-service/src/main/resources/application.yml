@@ -1,6 +1,8 @@
 spring:
   application:
     name: user-service
+  profiles:
+    include: local
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
